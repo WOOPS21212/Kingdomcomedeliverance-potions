@@ -105,7 +105,9 @@ export default async function PotionsPage() {
                 </div>
               )}
               
-              <p style={{ fontSize: '0.9rem', color: '#aaa' }}>Base: {potion.baseLiquid}</p>
+              {potion.baseLiquid !== "Unknown" && (
+                <p style={{ fontSize: '0.9rem', color: '#aaa' }}>Base: {potion.baseLiquid}</p>
+              )}
               <div style={{ marginTop: '10px' }}>
                 <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Ingredients:</p>
                 <ul style={{ paddingLeft: '20px' }}>
