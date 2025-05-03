@@ -2,7 +2,7 @@ import {defineConfig} from 'sanity'
 import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
-import {structure} from './deskStructure'
+import {structure} from './schemaTypes/eskStructure'
 
 export default defineConfig({
   name: 'default',

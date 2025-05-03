@@ -1,4 +1,3 @@
-import "./globals.css";
 import Link from "next/link";
 
 export const metadata = {
@@ -9,12 +8,18 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-gray-900 text-white">
-        <nav className="p-4 border-b border-gray-700 flex gap-6 text-lg">
-          <Link href="/">Home</Link>
-          <Link href="/potions">Potions</Link>
+      <body style={{ backgroundColor: '#111', color: 'white', margin: 0, fontFamily: 'Arial, sans-serif' }}>
+        <nav style={{ 
+          padding: '16px', 
+          borderBottom: '1px solid #333', 
+          display: 'flex', 
+          gap: '24px',
+          fontSize: '18px'
+        }}>
+          <Link href="/" style={{ color: 'white', textDecoration: 'none' }}>Home</Link>
+          <Link href="/potions" style={{ color: 'white', textDecoration: 'none' }}>Potions</Link>
         </nav>
-        <div className="max-w-6xl mx-auto px-4">{children}</div>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 16px' }}>{children}</div>
       </body>
     </html>
   );
