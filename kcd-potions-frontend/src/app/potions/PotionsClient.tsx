@@ -16,22 +16,6 @@ interface ProcessedPotion {
   acquisition?: string;
 }
 
-// Function to get color based on potion difficulty
-const getDifficultyColor = (difficulty: string): string => {
-  switch(difficulty.toLowerCase()) {
-    case 'easy':
-      return '#4CAF50'; // Green
-    case 'medium':
-      return '#FFC107'; // Amber
-    case 'hard':
-      return '#F44336'; // Red
-    case 'very hard':
-      return '#9C27B0'; // Purple
-    default:
-      return '#2196F3'; // Blue for unknown difficulty
-  }
-};
-
 export default function PotionsClient({ potions }: { potions: ProcessedPotion[] }) {
   const [selectedPotion, setSelectedPotion] = useState<ProcessedPotion | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -115,11 +99,7 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
                 padding: '15px',
                 boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                 transition: 'transform 0.2s, box-shadow 0.2s',
-                height: '100%',
-                position: 'relative',
-                overflow: 'hidden',
-                borderLeft: '8px solid',
-                borderLeftColor: getDifficultyColor(potion.difficulty)
+                height: '100%'
               }}
               className="potion-card"
             >
