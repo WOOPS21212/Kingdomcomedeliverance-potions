@@ -9,17 +9,21 @@
     "start": "sanity start",
     "build": "sanity build",
     "deploy": "sanity deploy",
-    "deploy-graphql": "sanity graphql deploy"
+    "deploy-graphql": "sanity graphql deploy",
+    "import-potions": "node --experimental-modules scripts/importPotions.js"
   },
   "keywords": [
     "sanity"
   ],
   "dependencies": {
+    "@sanity/client": "^7.0.0",
     "@sanity/vision": "^3.87.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "sanity": "^3.87.0",
-    "styled-components": "^6.1.15"
+    "slugify": "^1.6.6",
+    "styled-components": "^6.1.15",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@sanity/eslint-config-studio": "^5.0.2",
@@ -33,5 +37,6 @@
     "printWidth": 100,
     "bracketSpacing": false,
     "singleQuote": true
-  }
+  },
+  "type": "module"
 }

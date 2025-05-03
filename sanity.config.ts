@@ -1,16 +1,22 @@
 import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
+import {deskTool} from 'sanity/desk'
 import {visionTool} from '@sanity/vision'
 import {schemaTypes} from './schemaTypes'
+import {structure} from './deskStructure'
 
 export default defineConfig({
   name: 'default',
-  title: 'test-project',
+  title: 'KCD Potions',
 
   projectId: 'v54tatoq',
   dataset: 'production',
 
-  plugins: [structureTool(), visionTool()],
+  plugins: [
+    deskTool({
+      structure
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,

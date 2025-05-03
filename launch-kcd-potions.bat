@@ -1,4 +1,4 @@
-@echo off
+e?@echo off
 title Launching KCD-Potions AI Workspace
 echo.
 
