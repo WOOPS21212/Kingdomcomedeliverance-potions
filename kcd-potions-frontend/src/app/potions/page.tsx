@@ -30,7 +30,7 @@ interface ProcessedPotion {
 export default async function PotionsPage() {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), '../potions-data-enriched.json'), 'utf8')
+    fs.readFileSync(path.join(process.cwd(), '../potions-data-final.json'), 'utf8')
   );
   
   // Get the list of image files from the public/potion-recipes directory
@@ -68,7 +68,7 @@ export default async function PotionsPage() {
       effects: potion.effects,
       difficulty: potion.difficulty || "Medium",
       steps: potion.steps,
-      imagePath: matchingImage ? `/potion-recipes/${matchingImage}` : undefined,
+      imagePath: matchingImage ? `/potion-recipes/${matchingImage}` : '/potion-recipes/temp.png',
       enhancedEffects: potion.enhancedEffects,
       acquisition: potion.acquisition
     };
@@ -91,19 +91,17 @@ export default async function PotionsPage() {
             >
               <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px' }}>{potion.name}</h2>
               
-              {/* Add the potion image if available */}
-              {potion.imagePath && (
-                <div style={{ position: 'relative', height: '150px', marginBottom: '15px', borderRadius: '8px', overflow: 'hidden' }}>
-                  <Image 
-                    src={potion.imagePath}
-                    alt={`${potion.name} recipe`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 300px"
-                    priority={potion.name === "Aqua Vitalis"} // Add priority to the Aqua Vitalis image (LCP)
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-              )}
+              {/* Add the potion image (using placeholder if no specific image is available) */}
+              <div style={{ position: 'relative', height: '150px', marginBottom: '15px', borderRadius: '8px', overflow: 'hidden' }}>
+                <Image 
+                  src={potion.imagePath || '/potion-recipes/temp.png'}
+                  alt={`${potion.name} recipe`}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 300px"
+                  priority={potion.name === "Aqua Vitalis"} // Add priority to the Aqua Vitalis image (LCP)
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
               
               {potion.baseLiquid !== "Unknown" && (
                 <p style={{ fontSize: '0.9rem', color: '#aaa' }}>Base: {potion.baseLiquid}</p>
