@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import PotionModal from './PotionModal';
 
@@ -19,6 +19,15 @@ interface ProcessedPotion {
 export default function PotionsClient({ potions }: { potions: ProcessedPotion[] }) {
   const [selectedPotion, setSelectedPotion] = useState<ProcessedPotion | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sortOrder, setSortOrder] = useState<'default' | 'alphabetical'>('default');
+
+  // Sort potions based on current sort order
+  const sortedPotions = useMemo(() => {
+    if (sortOrder === 'alphabetical') {
+      return [...potions].sort((a, b) => a.name.localeCompare(b.name));
+    }
+    return potions;
+  }, [potions, sortOrder]);
 
   const openModal = (potion: ProcessedPotion) => {
     setSelectedPotion(potion);
@@ -29,11 +38,36 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
     setIsModalOpen(false);
   };
 
+  const toggleSortOrder = () => {
+    setSortOrder(sortOrder === 'default' ? 'alphabetical' : 'default');
+  };
+
   return (
     <main style={{ padding: '20px', backgroundColor: '#111', color: 'white', minHeight: '100vh' }}>
-      <h1 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '20px' }}>Potions</h1>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' }}>
-        {potions.map((potion: ProcessedPotion, index: number) => (
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Potions</h1>
+        <button 
+          onClick={toggleSortOrder}
+          style={{ 
+            backgroundColor: '#333', 
+            color: 'white', 
+            border: 'none', 
+            padding: '8px 16px', 
+            borderRadius: '5px',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px'
+          }}
+        >
+          <span>Sort: {sortOrder === 'alphabetical' ? 'A-Z' : 'Default'}</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 4H14M4 8H12M6 12H10" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px 20px' }}>
+        {sortedPotions.map((potion: ProcessedPotion, index: number) => (
           <div
             key={index}
             onClick={() => openModal(potion)}
