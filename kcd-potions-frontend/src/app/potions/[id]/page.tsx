@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Metadata } from 'next';
 
 // Define types for our data
 interface RawPotion {
@@ -27,7 +28,29 @@ interface ProcessedPotion {
   acquisition?: string;
 }
 
-export default function PotionDetailPage({ params }: { params: { id: string } }) {
+interface PotionPageParams {
+  params: {
+    id: string;
+  };
+  searchParams?: Record<string, string | string[] | undefined>;
+}
+
+export async function generateMetadata({ params }: PotionPageParams): Promise<Metadata> {
+  // Read the potions data from the JSON file
+  const potionsData: RawPotion[] = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
+  );
+  
+  const potionIndex = parseInt(params.id);
+  const potion = potionsData[potionIndex];
+  
+  return {
+    title: potion ? `${potion.name} | Kingdom Come Deliverance Potions` : 'Potion Not Found',
+    description: potion ? potion.effects : 'The potion you are looking for does not exist.'
+  };
+}
+
+export default async function PotionDetailPage({ params }: PotionPageParams) {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
