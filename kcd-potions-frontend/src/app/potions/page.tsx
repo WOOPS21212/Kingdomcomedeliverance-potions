@@ -47,12 +47,7 @@ export default async function PotionsPage() {
     // Split the ingredients string into an array
     const ingredientsArray = potion.ingredients
       .split(',')
-      .map((item: string) => item.trim())
-      .map((item: string) => {
-        // Extract just the ingredient name without the quantity
-        const match = item.match(/([A-Za-z\s']+)(?:\s+x\d+)?/);
-        return match ? match[1].trim() : item;
-      });
+      .map((item: string) => item.trim());
     
     // Find a matching image for this potion
     const potionNameLower = potion.name.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -114,12 +109,11 @@ export default async function PotionsPage() {
                   ))}
                 </ul>
               </div>
-              <p style={{ marginTop: '10px', color: '#8aff8a', fontStyle: 'italic' }}>{potion.effects}</p>
-              <p style={{ marginTop: '5px', fontSize: '0.9rem', color: '#ffcc00' }}>Difficulty: {potion.difficulty}</p>
+              <p style={{ marginTop: '10px', color: '#aaaaaa', fontStyle: 'italic', fontSize: '0.8rem' }}>{potion.effects}</p>
               {potion.steps && (
                 <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
                   <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Brewing Steps:</p>
-                  <ol style={{ paddingLeft: '20px', fontSize: '0.8rem', color: '#ccc' }}>
+                  <ol style={{ paddingLeft: '20px', fontSize: '1rem', color: '#ccc' }}>
                     {potion.steps.split('>').map((step, i) => (
                       <li key={i} style={{ marginBottom: '5px' }}>{step.trim()}</li>
                     ))}
@@ -130,7 +124,7 @@ export default async function PotionsPage() {
               {potion.enhancedEffects && (
                 <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
                   <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Enhanced Effects:</p>
-                  <p style={{ fontSize: '0.8rem', color: '#8aff8a', fontStyle: 'italic' }}>{potion.enhancedEffects}</p>
+                  <p style={{ fontSize: '0.8rem', color: '#aaaaaa', fontStyle: 'italic' }}>{potion.enhancedEffects}</p>
                 </div>
               )}
               
