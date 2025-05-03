@@ -34,18 +34,19 @@ type PotionParams = {
 }
 
 // Page props interface
-interface PotionPageProps {
-  params: PotionParams;
+interface PageProps {
+  params: Promise<PotionParams>;
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export async function generateMetadata({ params }: PotionPageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
   );
   
-  const potionIndex = parseInt(params.id);
+  const resolvedParams = await params;
+  const potionIndex = parseInt(resolvedParams.id);
   const potion = potionsData[potionIndex];
   
   return {
@@ -54,7 +55,8 @@ export async function generateMetadata({ params }: PotionPageProps): Promise<Met
   };
 }
 
-export default async function PotionDetailPage({ params }: PotionPageProps) {
+export default async function PotionDetailPage({ params }: PageProps) {
+  const resolvedParams = await params;
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
@@ -97,7 +99,7 @@ export default async function PotionDetailPage({ params }: PotionPageProps) {
   });
   
   // Find the potion that matches the ID from the URL
-  const potionIndex = parseInt(params.id);
+  const potionIndex = parseInt(resolvedParams.id);
   const potion = potions[potionIndex];
   
   if (!potion) {

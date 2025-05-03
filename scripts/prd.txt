@@ -1,0 +1,39 @@
+# Kingdom Come Deliverance Potions Database - Product Requirements Document
+
+## Overview
+This project aims to create a comprehensive database and frontend for Kingdom Come Deliverance potion recipes. It allows users to browse, search, and view detailed information about various potions from the game.
+
+## Data Structure
+The potion schema includes the following fields:
+- name: The name of the potion
+- slug: URL-friendly version of the name
+- effects: Description of the potion's effects
+- difficulty: Brewing difficulty level
+- baseLiquid: The base liquid used in brewing
+- ingredients: List of required ingredients
+- steps: Detailed brewing steps
+
+## Technical Implementation
+- Backend: Sanity.io content management system
+- Frontend: Next.js with Tailwind CSS
+- Data Import: Custom script (importPotions.js) to import potion data from JSON
+
+## Features
+1. Browse all potions in a gallery view
+2. View detailed information for each potion
+3. Filter potions by type (e.g., healing potions)
+4. Search potions by name or effect
+5. Responsive design for mobile and desktop
+
+## Future Enhancements
+- User accounts for saving favorite potions
+- Community contributions for potion variations
+- Integration with game guides
+- Interactive brewing tutorial
+
+## Integration with Task Master AI
+The project is configured to use Task Master AI for automated tasks and assistance with:
+- Content generation
+- Data validation
+- Feature implementation suggestions
+- Code optimization
