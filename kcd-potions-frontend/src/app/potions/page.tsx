@@ -121,7 +121,11 @@ export default async function PotionsPage() {
               {potion.steps && (
                 <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
                   <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Brewing Steps:</p>
-                  <p style={{ fontSize: '0.8rem', color: '#ccc' }}>{potion.steps}</p>
+                  <ol style={{ paddingLeft: '20px', fontSize: '0.8rem', color: '#ccc' }}>
+                    {potion.steps.split('>').map((step, i) => (
+                      <li key={i} style={{ marginBottom: '5px' }}>{step.trim()}</li>
+                    ))}
+                  </ol>
                 </div>
               )}
               
