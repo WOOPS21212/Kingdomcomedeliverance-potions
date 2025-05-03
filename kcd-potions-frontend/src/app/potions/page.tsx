@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import Image from 'next/image';
 
 // Define types for our data
 interface RawPotion {
@@ -9,6 +10,8 @@ interface RawPotion {
   difficulty: string;
   ingredients: string;
   steps: string;
+  enhancedEffects?: string; // New field for enhanced effects
+  acquisition?: string; // New field for acquisition information
 }
 
 interface ProcessedPotion {
@@ -18,14 +21,26 @@ interface ProcessedPotion {
   effects: string;
   difficulty: string;
   steps: string;
+  imagePath?: string; // Added image path property
+  enhancedEffects?: string; // New field for enhanced effects
+  acquisition?: string; // New field for acquisition information
 }
 
 // This is a server component, so we can use async/await
 export default async function PotionsPage() {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), '../potions-data.json'), 'utf8')
+    fs.readFileSync(path.join(process.cwd(), '../potions-data-updated.json'), 'utf8')
   );
+  
+  // Get the list of image files from the public/potion-recipes directory
+  let recipeImages: string[] = [];
+  try {
+    recipeImages = fs.readdirSync(path.join(process.cwd(), 'public/potion-recipes'))
+      .filter(file => file.endsWith('.jpg') || file.endsWith('.png') || file.endsWith('.jpeg'));
+  } catch (error) {
+    console.error('Error reading recipe images:', error);
+  }
   
   // Process the data to match our component's expected format
   const potions: ProcessedPotion[] = potionsData.map((potion: RawPotion) => {
@@ -39,13 +54,23 @@ export default async function PotionsPage() {
         return match ? match[1].trim() : item;
       });
     
+    // Find a matching image for this potion
+    const potionNameLower = potion.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const matchingImage = recipeImages.find(img => {
+      const imgNameLower = path.parse(img).name.toLowerCase().replace(/[^a-z0-9]/g, '');
+      return imgNameLower.includes(potionNameLower) || potionNameLower.includes(imgNameLower);
+    });
+    
     return {
       name: potion.name,
       baseLiquid: potion.baseLiquid || "Unknown",
       ingredients: ingredientsArray,
       effects: potion.effects,
       difficulty: potion.difficulty || "Medium",
-      steps: potion.steps
+      steps: potion.steps,
+      imagePath: matchingImage ? `/potion-recipes/${matchingImage}` : undefined,
+      enhancedEffects: potion.enhancedEffects,
+      acquisition: potion.acquisition
     };
   });
 
@@ -65,6 +90,21 @@ export default async function PotionsPage() {
               }}
             >
               <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '10px' }}>{potion.name}</h2>
+              
+              {/* Add the potion image if available */}
+              {potion.imagePath && (
+                <div style={{ position: 'relative', height: '150px', marginBottom: '15px', borderRadius: '8px', overflow: 'hidden' }}>
+                  <Image 
+                    src={potion.imagePath}
+                    alt={`${potion.name} recipe`}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    priority={potion.name === "Aqua Vitalis"} // Add priority to the Aqua Vitalis image (LCP)
+                    style={{ objectFit: 'cover' }}
+                  />
+                </div>
+              )}
+              
               <p style={{ fontSize: '0.9rem', color: '#aaa' }}>Base: {potion.baseLiquid}</p>
               <div style={{ marginTop: '10px' }}>
                 <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Ingredients:</p>
@@ -80,6 +120,20 @@ export default async function PotionsPage() {
                 <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
                   <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Brewing Steps:</p>
                   <p style={{ fontSize: '0.8rem', color: '#ccc' }}>{potion.steps}</p>
+                </div>
+              )}
+              
+              {potion.enhancedEffects && (
+                <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
+                  <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Enhanced Effects:</p>
+                  <p style={{ fontSize: '0.8rem', color: '#8aff8a', fontStyle: 'italic' }}>{potion.enhancedEffects}</p>
+                </div>
+              )}
+              
+              {potion.acquisition && (
+                <div style={{ marginTop: '15px', paddingTop: '10px', borderTop: '1px solid #444' }}>
+                  <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Where to Find:</p>
+                  <p style={{ fontSize: '0.8rem', color: '#ccc' }}>{potion.acquisition}</p>
                 </div>
               )}
             </div>
