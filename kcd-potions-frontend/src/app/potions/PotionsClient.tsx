@@ -20,16 +20,22 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
   const [selectedPotion, setSelectedPotion] = useState<ProcessedPotion | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<'default' | 'alphabetical' | 'ingredients'>('default');
+  const [isReversed, setIsReversed] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Sort potions based on current sort order
+  // Sort potions based on current sort order and reverse flag
   const sortedPotions = useMemo(() => {
+    let sorted = [...potions];
+    
     if (sortOrder === 'alphabetical') {
-      return [...potions].sort((a, b) => a.name.localeCompare(b.name));
+      sorted = sorted.sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortOrder === 'ingredients') {
-      return [...potions].sort((a, b) => a.ingredients.length - b.ingredients.length);
+      sorted = sorted.sort((a, b) => a.ingredients.length - b.ingredients.length);
     }
-    return potions;
-  }, [potions, sortOrder]);
+    
+    // If reversed, reverse the sorted array
+    return isReversed ? sorted.reverse() : sorted;
+  }, [potions, sortOrder, isReversed]);
 
   const openModal = (potion: ProcessedPotion) => {
     setSelectedPotion(potion);
@@ -40,45 +46,120 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
     setIsModalOpen(false);
   };
 
-  const cycleSortOrder = () => {
-    if (sortOrder === 'default') {
-      setSortOrder('alphabetical');
-    } else if (sortOrder === 'alphabetical') {
-      setSortOrder('ingredients');
-    } else {
-      setSortOrder('default');
-    }
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSortChange = (newSortOrder: 'default' | 'alphabetical' | 'ingredients') => {
+    setSortOrder(newSortOrder);
+    setIsDropdownOpen(false);
+  };
+
+  const toggleReverse = () => {
+    setIsReversed(!isReversed);
   };
 
   return (
     <main style={{ padding: '20px', backgroundColor: '#111', color: 'white', minHeight: '100vh' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Potions</h1>
-        <button 
-          onClick={cycleSortOrder}
-          style={{ 
-            backgroundColor: '#333', 
-            color: 'white', 
-            border: 'none', 
-            padding: '8px 16px', 
-            borderRadius: '5px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
-          }}
-        >
-          <span>Sort: {
-            sortOrder === 'alphabetical' 
-              ? 'A-Z' 
-              : sortOrder === 'ingredients' 
-                ? 'Fewest Ingredients' 
-                : 'Default'
-          }</span>
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2 4H14M4 8H12M6 12H10" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-          </svg>
-        </button>
+        <div style={{ position: 'relative' }}>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button 
+              onClick={toggleDropdown}
+              style={{ 
+                backgroundColor: '#333', 
+                color: 'white', 
+                border: 'none', 
+                padding: '8px 16px', 
+                borderRadius: '5px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px'
+              }}
+            >
+              <span>Sort: {
+                sortOrder === 'alphabetical' 
+                  ? 'A-Z' 
+                  : sortOrder === 'ingredients' 
+                    ? 'Fewest Ingredients' 
+                    : 'Default'
+              }</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 6L8 10L12 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            
+            <button 
+              onClick={toggleReverse}
+              style={{ 
+                backgroundColor: isReversed ? '#555' : '#333', 
+                color: 'white', 
+                border: 'none', 
+                padding: '8px', 
+                borderRadius: '5px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+              title="Reverse Order"
+            >
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 12L4 4M4 4L7 7M4 4L1 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 4L12 12M12 12L9 9M12 12L15 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          </div>
+          
+          {isDropdownOpen && (
+            <div style={{ 
+              position: 'absolute', 
+              top: '100%', 
+              right: '0', 
+              marginTop: '5px',
+              backgroundColor: '#333',
+              borderRadius: '5px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              zIndex: 10,
+              minWidth: '180px'
+            }}>
+              <div 
+                onClick={() => handleSortChange('default')}
+                style={{ 
+                  padding: '10px 15px',
+                  cursor: 'pointer',
+                  borderBottom: '1px solid #444',
+                  backgroundColor: sortOrder === 'default' ? '#444' : 'transparent'
+                }}
+              >
+                Default
+              </div>
+              <div 
+                onClick={() => handleSortChange('alphabetical')}
+                style={{ 
+                  padding: '10px 15px',
+                  cursor: 'pointer',
+                  borderBottom: '1px solid #444',
+                  backgroundColor: sortOrder === 'alphabetical' ? '#444' : 'transparent'
+                }}
+              >
+                Alphabetical (A-Z)
+              </div>
+              <div 
+                onClick={() => handleSortChange('ingredients')}
+                style={{ 
+                  padding: '10px 15px',
+                  cursor: 'pointer',
+                  backgroundColor: sortOrder === 'ingredients' ? '#444' : 'transparent'
+                }}
+              >
+                Fewest Ingredients
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px 20px' }}>
         {sortedPotions.map((potion: ProcessedPotion, index: number) => (
