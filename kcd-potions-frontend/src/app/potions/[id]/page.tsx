@@ -1,8 +1,8 @@
+import { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Metadata } from 'next';
 
 // Define types for our data
 interface RawPotion {
@@ -28,14 +28,18 @@ interface ProcessedPotion {
   acquisition?: string;
 }
 
-interface PotionPageParams {
-  params: {
-    id: string;
-  };
+// Define the params type
+type PotionParams = {
+  id: string;
+}
+
+// Page props interface
+interface PotionPageProps {
+  params: PotionParams;
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
-export async function generateMetadata({ params }: PotionPageParams): Promise<Metadata> {
+export async function generateMetadata({ params }: PotionPageProps): Promise<Metadata> {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
@@ -50,7 +54,7 @@ export async function generateMetadata({ params }: PotionPageParams): Promise<Me
   };
 }
 
-export default async function PotionDetailPage({ params }: PotionPageParams) {
+export default async function PotionDetailPage({ params }: PotionPageProps) {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
     fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
