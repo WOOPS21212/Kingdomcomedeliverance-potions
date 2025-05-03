@@ -19,12 +19,14 @@ interface ProcessedPotion {
 export default function PotionsClient({ potions }: { potions: ProcessedPotion[] }) {
   const [selectedPotion, setSelectedPotion] = useState<ProcessedPotion | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [sortOrder, setSortOrder] = useState<'default' | 'alphabetical'>('default');
+  const [sortOrder, setSortOrder] = useState<'default' | 'alphabetical' | 'ingredients'>('default');
 
   // Sort potions based on current sort order
   const sortedPotions = useMemo(() => {
     if (sortOrder === 'alphabetical') {
       return [...potions].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortOrder === 'ingredients') {
+      return [...potions].sort((a, b) => a.ingredients.length - b.ingredients.length);
     }
     return potions;
   }, [potions, sortOrder]);
@@ -38,8 +40,14 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
     setIsModalOpen(false);
   };
 
-  const toggleSortOrder = () => {
-    setSortOrder(sortOrder === 'default' ? 'alphabetical' : 'default');
+  const cycleSortOrder = () => {
+    if (sortOrder === 'default') {
+      setSortOrder('alphabetical');
+    } else if (sortOrder === 'alphabetical') {
+      setSortOrder('ingredients');
+    } else {
+      setSortOrder('default');
+    }
   };
 
   return (
@@ -47,7 +55,7 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
         <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Potions</h1>
         <button 
-          onClick={toggleSortOrder}
+          onClick={cycleSortOrder}
           style={{ 
             backgroundColor: '#333', 
             color: 'white', 
@@ -60,7 +68,13 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
             gap: '8px'
           }}
         >
-          <span>Sort: {sortOrder === 'alphabetical' ? 'A-Z' : 'Default'}</span>
+          <span>Sort: {
+            sortOrder === 'alphabetical' 
+              ? 'A-Z' 
+              : sortOrder === 'ingredients' 
+                ? 'Fewest Ingredients' 
+                : 'Default'
+          }</span>
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M2 4H14M4 8H12M6 12H10" stroke="white" strokeWidth="2" strokeLinecap="round"/>
           </svg>
