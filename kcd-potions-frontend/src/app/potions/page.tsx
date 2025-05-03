@@ -30,7 +30,7 @@ interface ProcessedPotion {
 export default async function PotionsPage() {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), '../potions-data-updated.json'), 'utf8')
+    fs.readFileSync(path.join(process.cwd(), '../potions-data-enriched.json'), 'utf8')
   );
   
   // Get the list of image files from the public/potion-recipes directory
@@ -112,7 +112,7 @@ export default async function PotionsPage() {
                 <p style={{ fontWeight: 'bold', marginBottom: '5px' }}>Ingredients:</p>
                 <ul style={{ paddingLeft: '20px' }}>
                   {potion.ingredients.map((ing: string, i: number) => (
-                    <li key={i} style={{ marginBottom: '3px' }}>• {ing}</li>
+                    <li key={i} style={{ marginBottom: '3px' }}>{ing}</li>
                   ))}
                 </ul>
               </div>
