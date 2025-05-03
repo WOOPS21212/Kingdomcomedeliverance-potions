@@ -30,7 +30,7 @@ interface ProcessedPotion {
 export default async function PotionsPage() {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
-    fs.readFileSync(path.join(process.cwd(), '../potions-data-final.json'), 'utf8')
+    fs.readFileSync(path.join(process.cwd(), '../potions-data-final-updated.json'), 'utf8')
   );
   
   // Get the list of image files from the public/potion-recipes directory
