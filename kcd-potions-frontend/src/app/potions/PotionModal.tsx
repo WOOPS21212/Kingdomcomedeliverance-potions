@@ -21,6 +21,9 @@ interface PotionModalProps {
 
 export default function PotionModal({ potion, isOpen, onClose }: PotionModalProps) {
   const [mounted, setMounted] = useState(false);
+  
+  // Get basePath for images
+  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
 
   useEffect(() => {
     setMounted(true);
@@ -46,6 +49,9 @@ export default function PotionModal({ potion, isOpen, onClose }: PotionModalProp
   }, [isOpen, onClose]);
 
   if (!mounted || !isOpen || !potion) return null;
+
+  // Make sure the image path is correct
+  const imagePath = potion.imagePath || `${basePath}/potion-recipes/temp.png`;
 
   return (
     <div 
@@ -125,7 +131,7 @@ export default function PotionModal({ potion, isOpen, onClose }: PotionModalProp
                 left: 0,
                 width: '100%',
                 height: '100%',
-                backgroundImage: `url(${potion.imagePath || '/potion-recipes/temp.png'})`,
+                backgroundImage: `url(${imagePath})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}>

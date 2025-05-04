@@ -43,6 +43,9 @@ export default async function PotionsPage() {
     console.error('Error reading recipe images:', error);
   }
   
+  // Get basePath from Next.js config for image URLs
+  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
+  
   // Process the data to match our component's expected format
   const potions: ProcessedPotion[] = potionsData.map((potion: RawPotion) => {
     // Split the ingredients string into an array
@@ -64,7 +67,7 @@ export default async function PotionsPage() {
       effects: potion.effects,
       difficulty: potion.difficulty || "Medium",
       steps: potion.steps,
-      imagePath: matchingImage ? `/potion-recipes/${matchingImage}` : '/potion-recipes/temp.png',
+      imagePath: matchingImage ? `${basePath}/potion-recipes/${matchingImage}` : `${basePath}/potion-recipes/temp.png`,
       enhancedEffects: potion.enhancedEffects,
       acquisition: potion.acquisition
     };

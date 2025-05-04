@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import PotionModal from './PotionModal';
 
@@ -23,19 +23,23 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
   const [isReversed, setIsReversed] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  // Get basePath for images
+  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
+  
   // Sort potions based on current sort order and reverse flag
-  const sortedPotions = useMemo(() => {
-    let sorted = [...potions];
-    
+  const sortedPotions = [...potions].sort((a, b) => {
     if (sortOrder === 'alphabetical') {
-      sorted = sorted.sort((a, b) => a.name.localeCompare(b.name));
+      return a.name.localeCompare(b.name);
     } else if (sortOrder === 'ingredients') {
-      sorted = sorted.sort((a, b) => a.ingredients.length - b.ingredients.length);
+      return a.ingredients.length - b.ingredients.length;
     }
-    
-    // If reversed, reverse the sorted array
-    return isReversed ? sorted.reverse() : sorted;
-  }, [potions, sortOrder, isReversed]);
+    return 0;
+  });
+  
+  // Reverse the order if isReversed is true
+  if (isReversed) {
+    sortedPotions.reverse();
+  }
 
   const openModal = (potion: ProcessedPotion) => {
     setSelectedPotion(potion);
@@ -189,7 +193,7 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
               {/* Add the potion image (using placeholder if no specific image is available) */}
               <div style={{ position: 'relative', height: '150px', marginBottom: '15px', borderRadius: '8px', overflow: 'hidden' }}>
                 <Image 
-                  src={potion.imagePath || '/potion-recipes/temp.png'}
+                  src={potion.imagePath || `${basePath}/potion-recipes/temp.png`}
                   alt={`${potion.name} recipe`}
                   fill
                   sizes="(max-width: 768px) 100vw, 300px"
