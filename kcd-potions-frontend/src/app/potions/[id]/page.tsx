@@ -69,6 +69,9 @@ export default async function PotionDetailPage({ params }: PageProps) {
     console.error('Error reading recipe images:', error);
   }
   
+  // Get basePath for images
+  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
+  
   // Process all potions to get their names and IDs
   const potions: ProcessedPotion[] = potionsData.map((potion: RawPotion) => {
     // Split the ingredients string into an array
@@ -90,7 +93,7 @@ export default async function PotionDetailPage({ params }: PageProps) {
       effects: potion.effects,
       difficulty: potion.difficulty || "Medium",
       steps: potion.steps,
-      imagePath: matchingImage ? `/potion-recipes/${matchingImage}` : '/potion-recipes/temp.png',
+      imagePath: matchingImage ? `${basePath}/potion-recipes/${matchingImage}` : `${basePath}/potion-recipes/temp.png`,
       enhancedEffects: potion.enhancedEffects,
       acquisition: potion.acquisition
     };
@@ -131,7 +134,7 @@ export default async function PotionDetailPage({ params }: PageProps) {
         {/* Add the potion image (using placeholder if no specific image is available) */}
         <div style={{ position: 'relative', height: '300px', marginBottom: '30px', borderRadius: '8px', overflow: 'hidden' }}>
           <Image 
-            src={potion.imagePath || '/potion-recipes/temp.png'}
+            src={potion.imagePath || `${basePath}/potion-recipes/temp.png`}
             alt={`${potion.name} recipe`}
             fill
             sizes="(max-width: 768px) 100vw, 1000px"
