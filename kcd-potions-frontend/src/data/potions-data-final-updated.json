@@ -1,9 +1,9 @@
-[
+ [
   {
     "name": "Aesop",
     "baseLiquid": "",
     "effects": "Increase horsemanship and houndmaster by 5 and makes it easier to sneak up on animals for 24 hours",
-    "difficulty": "Medium",
+    "difficulty": "",
     "ingredients": "Belladonna x1, Boar\u2019s Tusk x1, Comfrey x2",
     "steps": "Add 2 Comfrey to the mortar, grind, and pour into the cauldron > Add 1 Boar\u2019s Tusk to the cauldron > Boil for 2 turns > Add 1 Belladonna to the mortar, grind, and pour into the cauldron > Prepare phial and distill"
   },
