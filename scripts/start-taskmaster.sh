@@ -1,4 +1,4 @@
-#!/bin/bash
+    #!/bin/bash
 
 # Script to start the Task Master AI server
 echo "Starting Task Master AI server..."

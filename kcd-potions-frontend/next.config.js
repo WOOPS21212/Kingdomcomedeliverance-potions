@@ -10,8 +10,8 @@ const nextConfig = {
     // Disable TypeScript errors during builds
     ignoreBuildErrors: true,
   },
-  // Add your basePath here if needed
-  // basePath: '/kingdom-come-deliverance-2-potions',
+  // Set basePath for subdirectory deployment
+  basePath: '/kingdom-come-deliverance-2-potions',
 };
 
 module.exports = nextConfig;
