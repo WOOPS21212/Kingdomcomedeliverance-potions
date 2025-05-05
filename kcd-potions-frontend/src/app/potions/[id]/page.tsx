@@ -82,8 +82,12 @@ export default async function PotionDetailPage({ params }: PageProps) {
     console.error('Error reading recipe images:', error);
   }
   
-  // Get basePath for images
-  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
+  // Get basePath for images - empty on Vercel
+  const basePath = process.env.VERCEL 
+    ? '' 
+    : process.env.NODE_ENV === 'production' 
+      ? '/kingdom-come-deliverance-2-potions' 
+      : '';
   
   // Process all potions to get their names and IDs
   const potions: ProcessedPotion[] = potionsData.map((potion: RawPotion) => {

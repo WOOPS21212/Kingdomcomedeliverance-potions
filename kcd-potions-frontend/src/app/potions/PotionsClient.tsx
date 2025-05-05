@@ -23,8 +23,12 @@ export default function PotionsClient({ potions }: { potions: ProcessedPotion[] 
   const [isReversed, setIsReversed] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  // Get basePath for images
-  const basePath = process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '';
+  // Get basePath for images - empty on Vercel
+  const basePath = typeof window !== 'undefined' && window.location.hostname.includes('vercel.app') 
+    ? '' 
+    : process.env.NODE_ENV === 'production' 
+      ? '/kingdom-come-deliverance-2-potions' 
+      : '';
   
   // Sort potions based on current sort order and reverse flag
   const sortedPotions = [...potions].sort((a, b) => {
