@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "import-potions": "node scripts/importPotions.js"
+    "import-potions": "node scripts/importPotions.js",
+    "export": "next build"
   },
   "keywords": [
     "sanity"
@@ -17,6 +18,7 @@
   "dependencies": {
     "@sanity/client": "^6.29.1",
     "@sanity/vision": "^3.87.0",
+    "framer-motion": "^12.9.4",
     "next": "^15.3.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

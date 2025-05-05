@@ -39,6 +39,19 @@ interface PageProps {
   searchParams?: Record<string, string | string[] | undefined>;
 }
 
+// Generate static paths for all potions
+export async function generateStaticParams() {
+  // Read the potions data from the JSON file
+  const potionsData: RawPotion[] = JSON.parse(
+    fs.readFileSync(path.join(process.cwd(), 'src/data/potions-data-final-updated.json'), 'utf8')
+  );
+  
+  // Return an array of params objects with id for each potion
+  return potionsData.map((_, index) => ({
+    id: index.toString(),
+  }));
+}
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   // Read the potions data from the JSON file
   const potionsData: RawPotion[] = JSON.parse(
@@ -117,7 +130,7 @@ export default async function PotionDetailPage({ params }: PageProps) {
 
   return (
     <main style={{ padding: '20px', backgroundColor: '#111', color: 'white', minHeight: '100vh' }}>
-      <Link href="/potions" style={{ color: '#8aff8a', textDecoration: 'underline', marginBottom: '20px', display: 'inline-block' }}>
+        <Link href="/potions" style={{ color: '#8aff8a', textDecoration: 'underline', marginBottom: '20px', display: 'inline-block' }}>
         ← Back to Potions
       </Link>
       
