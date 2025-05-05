@@ -9,8 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "import-potions": "node scripts/importPotions.js",
-    "export": "next build"
+    "import-potions": "node scripts/importPotions.js"
   },
   "keywords": [
     "sanity"

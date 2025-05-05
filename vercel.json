@@ -1,0 +1,9 @@
+{
+  "buildCommand": "cd kcd-potions-frontend && npm install && npm run build",
+  "outputDirectory": "kcd-potions-frontend/out",
+  "framework": "nextjs",
+  "rewrites": [
+    { "source": "/kingdom-come-deliverance-2-potions/(.*)", "destination": "/kcd-potions-frontend/$1" }
+  ],
+  "trailingSlash": false
+}

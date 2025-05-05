@@ -10,13 +10,18 @@ const nextConfig = {
     // Disable TypeScript errors during builds
     ignoreBuildErrors: true,
   },
-  // Set basePath for subdirectory deployment (only when not on Vercel)
-  basePath: process.env.VERCEL ? '' : process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '',
-  // Enable static exports
-  output: 'export',
-  // Disable image optimization for static export
+  // Set basePath for subdirectory deployment
+  basePath: process.env.VERCEL ? '/kingdom-come-deliverance-2-potions' : process.env.NODE_ENV === 'production' ? '/kingdom-come-deliverance-2-potions' : '',
+  // Configure images
   images: {
-    unoptimized: true
+    domains: ['404found.art'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '404found.art',
+        pathname: '/kingdom-come-deliverance-2-potions/**',
+      },
+    ],
   }
 };
 
